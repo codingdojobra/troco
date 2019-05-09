@@ -1,0 +1,61 @@
+def calcula_troco(valor_compra, valor_pago):
+    if valor_compra > valor_pago:
+        return False
+    
+    moedas = (100, 50, 10, 5, 1, 0.50, 0.10, 0.05, 0.01)
+    
+    troco_atual = valor_pago - valor_compra
+    troco_final = {}
+    
+    while troco_atual > 0:
+        for moeda in moedas:
+            if moeda <= troco_atual:
+                troco_atual = round(troco_atual - moeda, 2)
+                if moeda in troco_final.keys():
+                    troco_final[moeda] += 1
+                else:
+                    troco_final[moeda] = 1
+                break
+                
+        
+    return troco_final
+    
+    
+def test_valor_compra_menor_que_valor_pago():
+    valor_compra = 20
+    valor_pago = 50
+    esperado = {10:3}
+    assert(calcula_troco(valor_compra, valor_pago) == esperado)
+    
+def test_valor_compra_maior_que_valor_pago():
+    esperado = False
+    assert(calcula_troco(50, 20) == esperado)
+    
+def test_valor_compra_igual_ao_valor_pago():
+    esperado = {}
+    assert(calcula_troco(10, 10) == esperado)    
+    
+def test_valor_compra_menor_que_valor_pago_2():
+    esperado = {10:2}
+    assert(calcula_troco(20, 40) == esperado) 
+
+def test_valor_compra_menor_que_valor_pago_com_moedas():
+    esperado = {10:2, 0.50:1}
+    assert(calcula_troco(20, 40.50) == esperado)
+    
+def test_valor_compra_um_e_noventa_e_nove():
+    esperado = {
+        10: 4,
+        5: 1,
+        1: 3,
+        0.01: 1
+    }
+    
+    assert(calcula_troco(1.99, 50) == esperado)
+    
+test_valor_compra_menor_que_valor_pago()
+test_valor_compra_maior_que_valor_pago()
+test_valor_compra_igual_ao_valor_pago()
+test_valor_compra_menor_que_valor_pago_2()
+test_valor_compra_menor_que_valor_pago_com_moedas()
+test_valor_compra_um_e_noventa_e_nove()
